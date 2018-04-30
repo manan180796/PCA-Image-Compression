@@ -166,8 +166,6 @@ DenseMatrix<datatype> operator+(const DenseMatrix<datatype> &op1,
 #if defined(_OPENMP)
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < copy.Rows(); ++row)
             for (unsigned long column = 0; column < copy.Columns(); ++column)
@@ -191,8 +189,6 @@ DenseMatrix<datatype> operator-(const DenseMatrix<datatype> &op1,
 #if defined(_OPENMP)
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < copy.Rows(); ++row)
             for (unsigned long column = 0; column < copy.Columns(); ++column)
@@ -215,22 +211,19 @@ DenseMatrix<datatype> operator*(const DenseMatrix<datatype> &op1,
     DenseMatrix<datatype> result =
         DenseMatrix<datatype>::Zeros(op1.Rows(), op2.Columns());
 #if defined(_OPENMP)
+    DenseMatrix<datatype> top2 = Transpose(op2);
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < result.Rows(); ++row) {
             for (unsigned long column = 0; column < result.Columns();
                  ++column) {
-                a++;
                 for (unsigned long i = 0; i < op1.Columns(); ++i) {
                     result(row, column) =
-                        result(row, column) + op1(row, i) * op2(i, column);
+                        result(row, column) + op1(row, i) * top2(column, i);
                 }
             }
         }
-        std::cout << a << std::endl;
     }
 #else
     for (unsigned long row = 0; row < result.Rows(); ++row)
@@ -249,8 +242,6 @@ DenseMatrix<datatype> operator*(const datatype &op1,
 #if defined(_OPENMP)
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < copy.Rows(); ++row)
             for (unsigned long column = 0; column < copy.Columns(); ++column)
@@ -272,8 +263,6 @@ DenseMatrix<datatype> operator*(const DenseMatrix<datatype> &op1,
 #if defined(_OPENMP)
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < copy.Rows(); ++row)
             for (unsigned long column = 0; column < copy.Columns(); ++column)
@@ -294,8 +283,6 @@ DenseMatrix<datatype> operator/(const DenseMatrix<datatype> &op1,
 #if defined(_OPENMP)
 #pragma omp parallel
     {
-        std::cout << omp_get_num_threads() << std::endl;
-        int a = 0;
 #pragma omp for collapse(2)
         for (unsigned long row = 0; row < copy.Rows(); ++row)
             for (unsigned long column = 0; column < copy.Columns(); ++column)
