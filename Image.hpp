@@ -51,11 +51,18 @@ DenseMatrix<double> ReadRawImage(std::string filename) {
 void SaveCompressedImage(DenseMatrix<double> image, std::string filename,
                          int eigenVectors) {
     DenseMatrix<double> V = PCA(image);
+    double n = image.Columns();
+    DenseMatrix<double> summer(image.Columns(), 1, 1);
+    DenseMatrix<double> mean = image * summer;
+    mean = mean / n;
+    std::cout << image.Columns() << std::endl;
+    image = image - mean * Transpose(summer);
     DenseMatrix<double> V_ =
         V.GetSubMatrix(0, V.Columns() - eigenVectors, V.Rows(), eigenVectors);
     DenseMatrix<double> newData = ((Transpose(V_)) * image);
     std::ofstream fout;
     fout.open(filename);
+    fout << mean;
     fout << V_;
     fout << newData;
     fout.close();
@@ -66,9 +73,14 @@ DenseMatrix<double> ReadCompressedImage(std::string filename) {
     fin.open(filename);
     DenseMatrix<double> V_(0, 0, 0);
     DenseMatrix<double> data(0, 0, 0);
+    DenseMatrix<double> mean(0, 0, 0);
+    fin >> mean;
     fin >> V_;
     fin >> data;
-    return V_ * data;
+    data = V_ * data;
+    DenseMatrix<double> summer(data.Columns(), 1, 1);
+    data = data + mean * Transpose(summer);
+    return data;
 }
 
 #endif
