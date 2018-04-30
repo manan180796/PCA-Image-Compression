@@ -1,6 +1,7 @@
 #ifndef DenseMatrix_hpp
 #define DenseMatrix_hpp
 #include <exception>
+#include <fstream>
 #include <initializer_list>
 #include <iostream>
 #include <vector>
@@ -44,6 +45,12 @@ class DenseMatrix {
 
 template <typename datatype>
 std::ostream &operator<<(std::ostream &cout, const DenseMatrix<datatype> &m);
+
+template <typename datatype>
+std::ofstream &operator<<(std::ofstream &fout, const DenseMatrix<datatype> &m);
+
+template <typename datatype>
+std::ifstream &operator>>(std::ifstream &fin, DenseMatrix<datatype> &m);
 
 
 template <typename datatype>

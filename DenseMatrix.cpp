@@ -121,7 +121,7 @@ DenseMatrix<datatype> DenseMatrix<datatype>::Random(unsigned long rows,
 
 template <typename datatype>
 std::ostream &operator<<(std::ostream &cout, const DenseMatrix<datatype> &m) {
-    cout << m.Rows() << " x " << m.Columns() << " double Matrix\n";
+    cout << m.Rows() << " x " << m.Columns() << " Matrix\n";
     for (unsigned long row = 0; row < m.Rows(); ++row) {
         for (unsigned long column = 0; column < m.Columns(); ++column) {
             cout << "\t" << std::setprecision(5) << m(row, column);
@@ -129,6 +129,31 @@ std::ostream &operator<<(std::ostream &cout, const DenseMatrix<datatype> &m) {
         cout << std::endl;
     }
     return cout;
+}
+
+template <typename datatype>
+std::ofstream &operator<<(std::ofstream &fout, const DenseMatrix<datatype> &m) {
+    fout << m.Rows() << " " << m.Columns() << "\n";
+    for (unsigned long i = 0; i < m.Rows(); ++i) {
+        for (unsigned long j = 0; j < m.Columns(); ++j) {
+            fout << m(i, j) << " ";
+        }
+        fout << "\n";
+    }
+    return fout;
+}
+
+template <typename datatype>
+std::ifstream &operator>>(std::ifstream &fin, DenseMatrix<datatype> &m) {
+    unsigned long numrows, numcolumns;
+    fin >> numrows >> numcolumns;
+    m = DenseMatrix<datatype>(numrows, numcolumns, 0);
+    for (unsigned long i = 0; i < m.Rows(); ++i) {
+        for (unsigned long j = 0; j < m.Columns(); ++j) {
+            fin >> m(i, j);
+        }
+    }
+    return fin;
 }
 
 template <typename datatype>
